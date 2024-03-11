@@ -7,7 +7,9 @@ import danogl.gui.ImageReader;
 import danogl.gui.SoundReader;
 import danogl.gui.UserInputListener;
 import danogl.gui.WindowController;
+import danogl.util.Vector2;
 import pepse.util.Constants;
+import pepse.world.Avatar;
 import pepse.world.Block;
 import pepse.world.Sky;
 import pepse.world.Terrain;
@@ -37,8 +39,18 @@ public class PepseGameManager extends GameManager {
         GameObject sun = Sun.create(windowController.getWindowDimensions(),10);
         gameObjects().addGameObject(sun, Constants.SUN_LAYER);
 
+        // create sun halo:
         GameObject sunHalo = SunHalo.create(sun);
         gameObjects().addGameObject(sunHalo,Constants.SUN_HALO_LAYER);
+
+        // new Vector2(0,windowController.getWindowDimensions().y()*Constants.TERRAIN_POS_OFFSET)
+
+        // create avatar:
+        Avatar avatar = new Avatar(
+                Vector2.ZERO,
+                inputListener,
+                imageReader);
+        gameObjects().addGameObject(avatar,Constants.BLOCK_LAYER);
 
         Terrain terrain = new Terrain(windowController.getWindowDimensions(), 4);
         List<Block> blocks = terrain.createInRange(0, 2000);
