@@ -13,6 +13,8 @@ public class Constants {
     public static final int SUN_HALO_LAYER = -101;
     public static final int BLOCK_LAYER = 1;
     public static final int NIGHT_SHADOW_LAYER = 100;
+    public static final int AVATAR_LAYER = 5;
+    public static final int ENERGY_COUNTER_LAYER = Layer.UI;
 
     // dimensions:
     public static final int BLOCK_SIZE = 30;
@@ -28,6 +30,7 @@ public class Constants {
     public static final String SKY_TAG = "sky";
     public static final String SUN_TAG = "sun";
     public static final String SUN_HALO_TAG = "sun halo";
+    public static final String ENERGY_COUNTER_TAG = "energy counter";
 
     // colors:
     public static final Color BASE_GROUND_COLOR = new Color(212, 123, 74);
@@ -41,4 +44,6 @@ public class Constants {
     // night-day cycle variables:
     public static final float MIDNIGHT_OPACITY = 0.95f;
 
+    // energy variables:
+    public static final int ENERGY_POINTS_MAX = 100;
 }
