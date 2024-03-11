@@ -5,22 +5,25 @@ import danogl.components.CoordinateSpace;
 import danogl.components.Transition;
 import danogl.gui.rendering.OvalRenderable;
 import danogl.util.Vector2;
+import pepse.util.Constants;
 
 import java.awt.*;
 
 public class Sun {
     public static GameObject create(Vector2 windowDimensions, float cycleLength) {
 
-        Vector2 sunDimensions = new Vector2(150, 150);
-        Vector2 sunPos = new Vector2(windowDimensions.x() * 0.5f, windowDimensions.y() * (1f / 3f))
+        Vector2 sunDimensions = Vector2.ONES.mult(Constants.SUN_SIZE);
+        Vector2 sunPos = new Vector2(windowDimensions.x() * 0.5f, windowDimensions.y() * Constants.SUN_POS_HEIGHT_OFFSET)
                 .subtract(sunDimensions.mult(0.5f));
 
         GameObject sun = new GameObject(
                 sunPos,
-                new Vector2(100, 100),
+                sunDimensions,
                 new OvalRenderable(Color.YELLOW));
         sun.setCoordinateSpace(CoordinateSpace.CAMERA_COORDINATES);
-        sun.setTag("sun");
+
+
+        sun.setTag(Constants.SUN_TAG);
 
 
         Vector2 horizonCenterPoint = new Vector2(windowDimensions.x() * 0.5f,
