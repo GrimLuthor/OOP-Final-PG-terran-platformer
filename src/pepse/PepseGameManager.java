@@ -43,11 +43,12 @@ public class PepseGameManager extends GameManager {
         gameObjects().addGameObject(sky, Constants.SKY_LAYER);
 
         // create night:
-        GameObject night = Night.create(windowController.getWindowDimensions(), 50);
+        GameObject night = Night.create(windowController.getWindowDimensions(),
+                Constants.NIGHT_DAY_CYCLE_INTERVAL);
         gameObjects().addGameObject(night, Constants.NIGHT_SHADOW_LAYER);
 
         // create sun:
-        GameObject sun = Sun.create(windowController.getWindowDimensions(),100);
+        GameObject sun = Sun.create(windowController.getWindowDimensions(),Constants.SUN_CYCLE_INTERVAL);
         gameObjects().addGameObject(sun, Constants.SUN_LAYER);
 
         // create sun halo:
