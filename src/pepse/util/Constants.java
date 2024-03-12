@@ -1,6 +1,7 @@
 package pepse.util;
 
 import danogl.collisions.Layer;
+import danogl.gui.rendering.AnimationRenderable;
 import danogl.util.Vector2;
 
 import java.awt.*;

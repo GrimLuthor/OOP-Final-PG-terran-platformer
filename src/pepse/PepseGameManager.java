@@ -24,10 +24,16 @@ import java.util.List;
 public class PepseGameManager extends GameManager {
 
 
+    private Avatar avatar;
+    private Vector2 windowDimensions;
+
     @Override
     public void initializeGame(ImageReader imageReader, SoundReader soundReader,
                                UserInputListener inputListener, WindowController windowController) {
         super.initializeGame(imageReader, soundReader, inputListener, windowController);
+
+
+        windowDimensions = windowController.getWindowDimensions();
 
         gameObjects().layers().shouldLayersCollide(Constants.BLOCK_LAYER,Constants.AVATAR_LAYER,true);
 
@@ -49,12 +55,12 @@ public class PepseGameManager extends GameManager {
 
 
         // create avatar:
-        Avatar avatar = new Avatar(
+        avatar = new Avatar(
                 new Vector2(0,windowController.getWindowDimensions().y()*Constants.SUN_POS_HEIGHT_OFFSET),
                 inputListener,
                 imageReader);
-//        setCamera(new Camera(avatar, Vector2.ZERO,
-//                windowController.getWindowDimensions(), windowController.getWindowDimensions()));
+        setCamera(new Camera(Vector2.ZERO,
+                windowController.getWindowDimensions(), windowController.getWindowDimensions()));
         gameObjects().addGameObject(avatar,Constants.AVATAR_LAYER);
 
         // create energy UI:
@@ -72,7 +78,8 @@ public class PepseGameManager extends GameManager {
     @Override
     public void update(float deltaTime) {
         super.update(deltaTime);
-        // Daniel wants to try adding a dynamic camera with smooth transitions later
+        // update camera
+        camera().setCenter(Vector2.of(avatar.getCenter().x(), windowDimensions.y()/2));
     }
 
     public static void main(String[] args) {
