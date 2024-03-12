@@ -18,7 +18,6 @@ public class Avatar extends GameObject {
     private float energy = 100f;
 
     private AvatarMovement movementMode = AvatarMovement.IDLE;
-    private boolean isIdle = true;
 
 
     private AnimationRenderable idleAnimation;
@@ -58,7 +57,6 @@ public class Avatar extends GameObject {
                     setAnimationRun();
                 }
                 xVel -= VELOCITY_X;
-                setAnimationRun();
                 renderer().setIsFlippedHorizontally(true);
             }
             if (inputListener.isKeyPressed(KeyEvent.VK_RIGHT)){
@@ -67,7 +65,6 @@ public class Avatar extends GameObject {
                     setAnimationRun();
                 }
                 xVel += VELOCITY_X;
-                setAnimationRun();
                 renderer().setIsFlippedHorizontally(false);
             }
         }
@@ -76,17 +73,13 @@ public class Avatar extends GameObject {
 
         if (getVelocity().x() != 0) {
             energy -= 0.5f;
-
         } else {
-
-            if (energy < 100) {
-                if (getVelocity().y() == 0){
+            if (getVelocity().y() == 0){
+                movementMode = AvatarMovement.IDLE;
+                setAnimationIdle();
+                if (energy < 100) {
                     energy += 1;
                 }
-            }
-            if (!isIdle) {
-                isIdle = true;
-                setAnimationIdle();
             }
         }
 
@@ -100,6 +93,7 @@ public class Avatar extends GameObject {
         if (inputListener.isKeyPressed(KeyEvent.VK_SPACE) && getVelocity().y() == 0) {
             transform().setVelocityY(VELOCITY_Y);
             energy -= 10;
+            movementMode = AvatarMovement.JUMPING;
             setAnimationJump();
         }
     }
