@@ -1,6 +1,7 @@
 package pepse.util;
 
 import danogl.collisions.Layer;
+import danogl.util.Vector2;
 
 import java.awt.*;
 
@@ -57,4 +58,10 @@ public class Constants {
 
     // Tree:
     public static final int TREE_HEIGHT = 300;
+
+
+    public static final float NIGHT_DAY_CYCLE_INTERVAL = 100;
+    public static final float SUN_CYCLE_INTERVAL = NIGHT_DAY_CYCLE_INTERVAL * 2;
+    public static final double TIME_BETWEEN_CLIPS = 0.1;
+    public static final Vector2 ENERGY_COUNTER_UI_DIMENSIONS = Vector2.of(100, 50);
 }
