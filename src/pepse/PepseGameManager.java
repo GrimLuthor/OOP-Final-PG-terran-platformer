@@ -71,14 +71,14 @@ public class PepseGameManager extends GameManager {
 
         // create terrain:
         Terrain terrain = new Terrain(windowController.getWindowDimensions(), Constants.SEED);
-        List<Block> blocks = terrain.createInRange(Constants.RANGE[0], Constants.RANGE[1]);
+        List<Block> blocks = terrain.createInRange(Constants.TERRAIN_CHUNK_SIZE[0], Constants.TERRAIN_CHUNK_SIZE[1]);
         for (Block block : blocks) {
             gameObjects().addGameObject(block, Constants.BLOCK_LAYER);
         }
 
         // create trees:
         Flora flora = new Flora(terrain);
-        List<Tree> trees = flora.createInRange(Constants.RANGE[0], Constants.RANGE[1]);
+        List<Tree> trees = flora.createInRange(Constants.TERRAIN_CHUNK_SIZE[0], Constants.TERRAIN_CHUNK_SIZE[1]);
         for (Tree tree : trees) {
             gameObjects().addGameObject(tree, Constants.TREE_LAYER);
         }
@@ -89,6 +89,11 @@ public class PepseGameManager extends GameManager {
         super.update(deltaTime);
         // update camera
         camera().setCenter(Vector2.of(avatar.getCenter().x(), windowDimensions.y()/2));
+
+
+        // infinite gen:
+
+
     }
 
     public static void main(String[] args) {

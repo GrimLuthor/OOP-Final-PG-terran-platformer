@@ -20,7 +20,7 @@ public class Flora {
         List<Tree> trees = new ArrayList<>();
 
         for (int x = minX; x < maxX; x += Constants.BLOCK_SIZE) {
-            if (rand.nextDouble(1) < 0.1) {
+            if (rand.nextInt(100) < 10) {
                 trees.add(createTree(x));
                 x += Constants.BLOCK_SIZE;
             }

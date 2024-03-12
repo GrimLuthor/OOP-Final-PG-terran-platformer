@@ -21,10 +21,11 @@ public class Constants {
     public static final int ENERGY_COUNTER_LAYER = Layer.UI;
 
     // dimensions:
-    public static final int[] RANGE = {0, 2000};
+    public static final int[] TERRAIN_CHUNK_SIZE = {0, 2000};
     public static final int BLOCK_SIZE = 30;
     public static final int SUN_SIZE = 150;
     public static final int SUN_HALO_SIZE = 250;
+    public static final Vector2 ENERGY_COUNTER_UI_DIMENSIONS = Vector2.of(100, 50);
 
     // positions:
     public static final float SUN_POS_HEIGHT_OFFSET = (1f/3f);
@@ -52,16 +53,15 @@ public class Constants {
 
     // night-day cycle variables:
     public static final float MIDNIGHT_OPACITY = 0.95f;
+    public static final float NIGHT_DAY_CYCLE_INTERVAL = 100;
+    public static final float SUN_CYCLE_INTERVAL = NIGHT_DAY_CYCLE_INTERVAL * 2;
 
     // energy variables:
     public static final int ENERGY_POINTS_MAX = 100;
 
-    // Tree:
+    // tree variables:
     public static final int TREE_HEIGHT = 300;
 
-
-    public static final float NIGHT_DAY_CYCLE_INTERVAL = 100;
-    public static final float SUN_CYCLE_INTERVAL = NIGHT_DAY_CYCLE_INTERVAL * 2;
+    // animation:
     public static final double TIME_BETWEEN_CLIPS = 0.1;
-    public static final Vector2 ENERGY_COUNTER_UI_DIMENSIONS = Vector2.of(100, 50);
 }
