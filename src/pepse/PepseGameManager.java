@@ -2,7 +2,6 @@ package pepse;
 
 import danogl.GameManager;
 import danogl.GameObject;
-import danogl.collisions.Layer;
 import danogl.gui.ImageReader;
 import danogl.gui.SoundReader;
 import danogl.gui.UserInputListener;
@@ -18,6 +17,8 @@ import pepse.world.Terrain;
 import pepse.world.daynight.Night;
 import pepse.world.daynight.Sun;
 import pepse.world.daynight.SunHalo;
+import pepse.world.trees.Flora;
+import pepse.world.trees.Tree;
 
 import java.util.List;
 
@@ -67,11 +68,18 @@ public class PepseGameManager extends GameManager {
         GameObject energyCounterUI = EnergyCounterUI.create(avatar);
         gameObjects().addGameObject(energyCounterUI,Constants.ENERGY_COUNTER_LAYER);
 
-
-        Terrain terrain = new Terrain(windowController.getWindowDimensions(), 4);
-        List<Block> blocks = terrain.createInRange(0, 2000);
+        // create terrain:
+        Terrain terrain = new Terrain(windowController.getWindowDimensions(), Constants.SEED);
+        List<Block> blocks = terrain.createInRange(Constants.RANGE[0], Constants.RANGE[1]);
         for (Block block : blocks) {
             gameObjects().addGameObject(block, Constants.BLOCK_LAYER);
+        }
+
+        // create trees:
+        Flora flora = new Flora(terrain);
+        List<Tree> trees = flora.createInRange(Constants.RANGE[0], Constants.RANGE[1]);
+        for (Tree tree : trees) {
+            gameObjects().addGameObject(tree, Constants.TREE_LAYER);
         }
     }
 

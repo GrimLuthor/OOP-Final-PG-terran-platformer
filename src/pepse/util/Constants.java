@@ -1,23 +1,26 @@
 package pepse.util;
 
 import danogl.collisions.Layer;
-import danogl.gui.rendering.AnimationRenderable;
-import danogl.util.Vector2;
 
 import java.awt.*;
 
 public class Constants {
 
+    // seed:
+    public static final int SEED = 4;
+
     // layers:
-    public static final int SKY_LAYER = -105;
+    public static final int SKY_LAYER = Layer.BACKGROUND;
     public static final int SUN_LAYER = -100;
     public static final int SUN_HALO_LAYER = -101;
     public static final int BLOCK_LAYER = 1;
+    public static final int TREE_LAYER = 2;
+    public static final int AVATAR_LAYER = 3;
     public static final int NIGHT_SHADOW_LAYER = 100;
-    public static final int AVATAR_LAYER = 5;
     public static final int ENERGY_COUNTER_LAYER = Layer.UI;
 
     // dimensions:
+    public static final int[] RANGE = {0, 2000};
     public static final int BLOCK_SIZE = 30;
     public static final int SUN_SIZE = 150;
     public static final int SUN_HALO_SIZE = 250;
@@ -27,16 +30,20 @@ public class Constants {
     public static final float TERRAIN_POS_OFFSET = (2f/3f);
 
     // tags:
+    public static final String GROUND_TAG = "ground";
     public static final String NIGHT_TAG = "night";
     public static final String SKY_TAG = "sky";
     public static final String SUN_TAG = "sun";
     public static final String SUN_HALO_TAG = "sun halo";
     public static final String ENERGY_COUNTER_TAG = "energy counter";
+    public static final String TREE_TAG = "tree";
 
     // colors:
     public static final Color BASE_GROUND_COLOR = new Color(212, 123, 74);
     public static final Color SUN_HALO_COLOR = new Color(255, 255, 0, 20);
     public static final Color BASIC_SKY_COLOR = Color.decode("#80C6E5");
+    public static final Color TRUNK_COLOR = new Color(100, 50, 20);
+    public static final Color LEAF_COLOR = new Color(50, 200, 30);
 
     // terrain gen variables:
     public static final int TERRAIN_DEPTH = 20;
@@ -47,4 +54,7 @@ public class Constants {
 
     // energy variables:
     public static final int ENERGY_POINTS_MAX = 100;
+
+    // Tree:
+    public static final int TREE_HEIGHT = 300;
 }

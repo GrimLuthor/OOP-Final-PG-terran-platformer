@@ -16,15 +16,9 @@ public class Terrain {
     private final NoiseGenerator noiseGenerator;
     private final float groundHeightAtX0;
 
-
     public Terrain(Vector2 windowDimensions, int seed) {
         groundHeightAtX0 = windowDimensions.y() * Constants.TERRAIN_POS_OFFSET;
         noiseGenerator = new NoiseGenerator(seed, (int) groundHeightAtX0);
-    }
-
-    private float groundHeightAt(float x) {
-        float noise = (float) noiseGenerator.noise(x, Constants.BLOCK_SIZE * Constants.TERRAIN_NOISE_FACTOR);
-        return groundHeightAtX0 + noise;
     }
 
     public List<Block> createInRange(int minX, int maxX) {
@@ -33,18 +27,27 @@ public class Terrain {
         // if x was negative then it was rounded upwards, so we need to subtract a block
         x -= minX < x ? Constants.BLOCK_SIZE : 0;
         while(x < maxX) {
-            float y = (float) Math.floor(groundHeightAt(x) / Constants.BLOCK_SIZE) * Constants.BLOCK_SIZE;
-            for (int i = 0; i < Constants.TERRAIN_DEPTH; i++) {
-                Vector2 position = new Vector2(x, y);
-                Renderable blockRender =
-                        new RectangleRenderable(ColorSupplier.approximateColor(Constants.BASE_GROUND_COLOR));
-                Block block = new Block(position, blockRender);
-                block.setTag("ground");
-                blocks.add(block);
-                y += Constants.BLOCK_SIZE;
+            float y = groundHeightAt(x);
+            for (int i = 0; i < Constants.TERRAIN_DEPTH; i++, y += Constants.BLOCK_SIZE) {
+                blocks.add(createBlock(Vector2.of(x, y)));
             }
             x += Constants.BLOCK_SIZE;
         }
         return blocks;
+    }
+
+    public float groundHeightAt(float x) {
+        float noise = (float)
+                noiseGenerator.noise(x, Constants.BLOCK_SIZE * Constants.TERRAIN_NOISE_FACTOR);
+        x = groundHeightAtX0 + noise;
+        return (float) Math.floor(x / Constants.BLOCK_SIZE) * Constants.BLOCK_SIZE;
+    }
+
+    private Block createBlock(Vector2 position) {
+        Renderable blockRender =
+                new RectangleRenderable(ColorSupplier.approximateColor(Constants.BASE_GROUND_COLOR));
+        Block block = new Block(position, blockRender);
+        block.setTag(Constants.GROUND_TAG);
+        return block;
     }
 }

@@ -12,7 +12,7 @@ public class SunHalo {
     public static GameObject create(GameObject sun) {
         GameObject sunHalo = new GameObject(sun.getTopLeftCorner(),
                 Vector2.ONES.mult(Constants.SUN_HALO_SIZE),
-                new OvalRenderable(new Color(255, 255, 0, 20)));
+                new OvalRenderable(Constants.SUN_HALO_COLOR));
 
         sunHalo.addComponent((deltaTime -> sunHalo.setCenter(sun.getCenter())));
 
