@@ -38,7 +38,7 @@ public class Constants {
     public static final String SUN_TAG = "sun";
     public static final String SUN_HALO_TAG = "sun halo";
     public static final String ENERGY_COUNTER_TAG = "energy counter";
-    public static final String TREE_TAG = "tree";
+    public static final String LEAF_TAG = "leaf";
 
     // colors:
     public static final Color BASE_GROUND_COLOR = new Color(212, 123, 74);
@@ -61,6 +61,7 @@ public class Constants {
 
     // tree variables:
     public static final int TREE_HEIGHT = 300;
+    public static final int LEAVES_CROWN_SIZE = 8;
 
     // animation:
     public static final double TIME_BETWEEN_CLIPS = 0.1;

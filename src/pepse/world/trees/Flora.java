@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Random;
 
 public class Flora {
-    private final Terrain terrain;
+    private final Terrain terrain; //TODO: callback instead of terrain instance
     private final Random rand = new Random(Constants.SEED);
     public Flora(Terrain terrain) {
         this.terrain = terrain;
@@ -29,10 +29,7 @@ public class Flora {
     }
 
     private Tree createTree(int x) {
-        Renderable trunk = new RectangleRenderable(Constants.TRUNK_COLOR);
         float y = terrain.groundHeightAt(x) - Constants.TREE_HEIGHT;
-        Tree tree = new Tree(Vector2.of(x, y), trunk);
-        tree.setTag(Constants.TREE_TAG);
-        return tree;
+        return new Tree(Vector2.of(x, y),rand);
     }
 }
