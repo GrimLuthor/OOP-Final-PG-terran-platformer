@@ -20,12 +20,20 @@ import pepse.world.daynight.SunHalo;
 import pepse.world.trees.Flora;
 import pepse.world.trees.Tree;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class PepseGameManager extends GameManager {
 
 
     private Avatar avatar;
+    private Terrain terrain;
+    private Flora flora;
+
+    private int mostLeftChunk = 0;
+    private int mostRightChunk = 0;
+
     private Vector2 windowDimensions;
 
     @Override
@@ -70,15 +78,26 @@ public class PepseGameManager extends GameManager {
         gameObjects().addGameObject(energyCounterUI,Constants.ENERGY_COUNTER_LAYER);
 
         // create terrain:
-        Terrain terrain = new Terrain(windowController.getWindowDimensions(), Constants.SEED);
-        List<Block> blocks = terrain.createInRange(Constants.TERRAIN_CHUNK_SIZE[0], Constants.TERRAIN_CHUNK_SIZE[1]);
+        terrain = new Terrain(windowDimensions, Constants.SEED);
+        generateTerrain(0,Constants.TERRAIN_CHUNK_SIZE);
+
+        // create trees:
+        flora = new Flora(terrain);
+        generateFlora(0,Constants.TERRAIN_CHUNK_SIZE);
+
+    }
+
+    private void generateTerrain(int minX, int maxX){
+        System.out.println("Generating terrain chunk between "+minX+" and "+maxX);
+        List<Block> blocks = terrain.createInRange(minX,maxX);
         for (Block block : blocks) {
             gameObjects().addGameObject(block, Constants.BLOCK_LAYER);
         }
+    }
 
-        // create trees:
-        Flora flora = new Flora(terrain);
-        List<Tree> trees = flora.createInRange(Constants.TERRAIN_CHUNK_SIZE[0], Constants.TERRAIN_CHUNK_SIZE[1]);
+    private void generateFlora(int minX, int maxX) {
+        System.out.println("Generating flora between "+minX+" and "+maxX);
+        List<Tree> trees = flora.createInRange(minX, maxX);
         for (Tree tree : trees) {
             gameObjects().addGameObject(tree, Constants.TREE_LAYER);
         }
@@ -92,8 +111,24 @@ public class PepseGameManager extends GameManager {
 
 
         // infinite gen:
+        handleWorldGeneration();
+    }
 
-
+    private void handleWorldGeneration() {
+        if (avatar.getCenter().x() - ((mostLeftChunk) * Constants.TERRAIN_CHUNK_SIZE) < windowDimensions.x()/2) {
+            int minX = (mostLeftChunk-1)*Constants.TERRAIN_CHUNK_SIZE;
+            int maxX = minX + Constants.TERRAIN_CHUNK_SIZE;
+            generateTerrain(minX,maxX);
+            generateFlora(minX,maxX);
+            mostLeftChunk-=1;
+        }
+        if (((mostRightChunk+1) * Constants.TERRAIN_CHUNK_SIZE) - avatar.getCenter().x() < windowDimensions.x()/2) {
+            int minX = (mostRightChunk+1)*Constants.TERRAIN_CHUNK_SIZE;
+            int maxX = minX + Constants.TERRAIN_CHUNK_SIZE;
+            generateTerrain(minX,maxX);
+            generateFlora(minX,maxX);
+            mostRightChunk+=1;
+        }
     }
 
     public static void main(String[] args) {

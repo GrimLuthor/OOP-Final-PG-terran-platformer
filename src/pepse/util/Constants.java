@@ -21,7 +21,7 @@ public class Constants {
     public static final int ENERGY_COUNTER_LAYER = Layer.UI;
 
     // dimensions:
-    public static final int[] TERRAIN_CHUNK_SIZE = {0, 2000};
+    public static final int TERRAIN_CHUNK_SIZE = 2010;
     public static final int BLOCK_SIZE = 30;
     public static final int SUN_SIZE = 150;
     public static final int SUN_HALO_SIZE = 250;
