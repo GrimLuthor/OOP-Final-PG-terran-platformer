@@ -154,4 +154,8 @@ public class Avatar extends GameObject {
     public float getEnergyCount() {
         return energy;
     }
+
+    public AvatarMovement getMovementMode () {
+        return movementMode;
+    }
 }
