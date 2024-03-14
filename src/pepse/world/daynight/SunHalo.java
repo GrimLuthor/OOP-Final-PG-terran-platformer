@@ -6,8 +6,6 @@ import danogl.gui.rendering.OvalRenderable;
 import danogl.util.Vector2;
 import pepse.util.Constants;
 
-import java.awt.*;
-
 public class SunHalo {
     public static GameObject create(GameObject sun) {
         GameObject sunHalo = new GameObject(sun.getTopLeftCorner(),

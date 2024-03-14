@@ -22,9 +22,7 @@ public class Sun {
                 new OvalRenderable(Color.YELLOW));
         sun.setCoordinateSpace(CoordinateSpace.CAMERA_COORDINATES);
 
-
         sun.setTag(Constants.SUN_TAG);
-
 
         Vector2 horizonCenterPoint = new Vector2(windowDimensions.x() * 0.5f,
                 windowDimensions.y() * (2f / 3f));

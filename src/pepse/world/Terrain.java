@@ -7,10 +7,8 @@ import pepse.util.ColorSupplier;
 import pepse.util.Constants;
 import pepse.util.NoiseGenerator;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class Terrain {
     private final NoiseGenerator noiseGenerator;
@@ -46,8 +44,6 @@ public class Terrain {
     private Block createBlock(Vector2 position) {
         Renderable blockRender =
                 new RectangleRenderable(ColorSupplier.approximateColor(Constants.BASE_GROUND_COLOR));
-        Block block = new Block(position, blockRender);
-        block.setTag(Constants.GROUND_TAG);
-        return block;
+        return new Block(position, blockRender);
     }
 }

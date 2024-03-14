@@ -12,27 +12,21 @@ import pepse.util.Constants;
 import java.awt.event.KeyEvent;
 
 public class Avatar extends GameObject {
-    private static final float VELOCITY_X = 400;
-    private static final float VELOCITY_Y = -650;
-    private static final float GRAVITY = 1000;
+    private final UserInputListener inputListener;
+    private final ImageReader imageReader;
 
-    private float energy = 100f;
+    private float energy = Constants.ENERGY_POINTS_MAX;
 
     private AvatarMovement movementMode = AvatarMovement.IDLE;
-
 
     private AnimationRenderable idleAnimation;
     private AnimationRenderable jumpAnimation;
     private AnimationRenderable runAnimation;
 
-
-    private final UserInputListener inputListener;
-    private final ImageReader imageReader;
-
     public Avatar(Vector2 pos, UserInputListener inputListener, ImageReader imageReader) {
         super(pos, new Vector2(50, 78), imageReader.readImage("assets/idle_0.png", true));
         physics().preventIntersectionsFromDirection(Vector2.ZERO);
-        transform().setAccelerationY(GRAVITY);
+        transform().setAccelerationY(Constants.GRAVITY);
         this.inputListener = inputListener;
         this.imageReader = imageReader;
     }
@@ -55,7 +49,7 @@ public class Avatar extends GameObject {
         transform().setVelocityX(xVel);
 
         if (getVelocity().x() != 0) {
-            energy -= 0.5f;
+//            energy -= 0.5f;
         } else if (isOnGround() && inputListener.isKeyPressed(KeyEvent.VK_LEFT)
                 == inputListener.isKeyPressed(KeyEvent.VK_RIGHT)) {
             energy = Math.min(energy + 1, 100);
@@ -77,11 +71,11 @@ public class Avatar extends GameObject {
 
         float xVel = 0;
         if (inputListener.isKeyPressed(KeyEvent.VK_LEFT)) {
-            xVel -= VELOCITY_X;
+            xVel -= Constants.VELOCITY_X;
             renderer().setIsFlippedHorizontally(true);
         }
         if (inputListener.isKeyPressed(KeyEvent.VK_RIGHT)) {
-            xVel += VELOCITY_X;
+            xVel += Constants.VELOCITY_X;
             renderer().setIsFlippedHorizontally(false);
         }
 
@@ -90,8 +84,8 @@ public class Avatar extends GameObject {
 
     private void processJumping() {
         if (energy >= 10 && inputListener.isKeyPressed(KeyEvent.VK_SPACE) && isOnGround()) {
-            transform().setVelocityY(VELOCITY_Y);
-            energy -= 10;
+            transform().setVelocityY(Constants.VELOCITY_Y);
+//            energy -= 10;
             movementMode = AvatarMovement.JUMPING;
             setAnimationJump();
         }
@@ -155,7 +149,7 @@ public class Avatar extends GameObject {
         return energy;
     }
 
-    public AvatarMovement getMovementMode () {
+    public AvatarMovement getMovementMode() {
         return movementMode;
     }
 }

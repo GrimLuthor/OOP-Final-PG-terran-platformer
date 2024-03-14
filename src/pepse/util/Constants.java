@@ -4,19 +4,22 @@ import danogl.collisions.Layer;
 import danogl.util.Vector2;
 
 import java.awt.*;
+import java.util.Random;
 
 public class Constants {
 
     // seed:
     public static final int SEED = 4;
+    public static final Random rand = new Random(SEED);
 
     // layers:
     public static final int SKY_LAYER = Layer.BACKGROUND;
     public static final int SUN_LAYER = -100;
     public static final int SUN_HALO_LAYER = -101;
     public static final int BLOCK_LAYER = 1;
-    public static final int TREE_LAYER = 2;
-    public static final int AVATAR_LAYER = 3;
+    public static final int TRUNK_LAYER = 2;
+    public static final int LEAF_LAYER = 3;
+    public static final int AVATAR_LAYER = 4;
     public static final int NIGHT_SHADOW_LAYER = 100;
     public static final int ENERGY_COUNTER_LAYER = Layer.UI;
 
@@ -38,7 +41,9 @@ public class Constants {
     public static final String SUN_TAG = "sun";
     public static final String SUN_HALO_TAG = "sun halo";
     public static final String ENERGY_COUNTER_TAG = "energy counter";
+    public static final String TRUNK_TAG = "trunk";
     public static final String LEAF_TAG = "leaf";
+    public static final String FRUIT_TAG = "fruit";
 
     // colors:
     public static final Color BASE_GROUND_COLOR = new Color(212, 123, 74);
@@ -59,10 +64,21 @@ public class Constants {
     // energy variables:
     public static final int ENERGY_POINTS_MAX = 100;
 
+    // avatar variables:
+    public static final float VELOCITY_X = 400;
+    public static final float VELOCITY_Y = -800;
+    public static final float GRAVITY = 1000;
+
     // tree variables:
-    public static final int TREE_HEIGHT = 300;
-    public static final int LEAVES_CROWN_SIZE = 8;
+    public static final int AVG_TREE_HEIGHT = 200;
+    public static final int LEAVES_CROWN_SIZE = 6;
+    public static final Color FRUIT_COLOR = Color.RED;
+
+    // spawn probabilities:
+    public static final double TREE_PROBABILITY = 0.069;
+    public static final double LEAF_PROBABILITY = 0.69;
+    public static final double FRUIT_PROBABILITY = LEAF_PROBABILITY + 0.15;
 
     // animation:
-    public static final double TIME_BETWEEN_CLIPS = 0.1;
+    public static final double TIME_BETWEEN_CLIPS = 0.2;
 }

@@ -2,6 +2,7 @@ package pepse;
 
 import danogl.GameManager;
 import danogl.GameObject;
+import danogl.components.Transition;
 import danogl.gui.ImageReader;
 import danogl.gui.SoundReader;
 import danogl.gui.UserInputListener;
@@ -9,6 +10,7 @@ import danogl.gui.WindowController;
 import danogl.gui.rendering.Camera;
 import danogl.util.Vector2;
 import pepse.ui.EnergyCounterUI;
+import pepse.util.AvatarMovement;
 import pepse.util.Constants;
 import pepse.world.Avatar;
 import pepse.world.Block;
@@ -18,9 +20,13 @@ import pepse.world.daynight.Night;
 import pepse.world.daynight.Sun;
 import pepse.world.daynight.SunHalo;
 import pepse.world.trees.Flora;
+import pepse.world.trees.Fruit;
+import pepse.world.trees.Leaf;
 import pepse.world.trees.Tree;
 
 import java.util.List;
+import java.util.function.*;
+
 
 public class PepseGameManager extends GameManager {
 
@@ -38,8 +44,6 @@ public class PepseGameManager extends GameManager {
     public void initializeGame(ImageReader imageReader, SoundReader soundReader,
                                UserInputListener inputListener, WindowController windowController) {
         super.initializeGame(imageReader, soundReader, inputListener, windowController);
-
-
         windowDimensions = windowController.getWindowDimensions();
 
         gameObjects().layers().shouldLayersCollide(Constants.BLOCK_LAYER, Constants.AVATAR_LAYER, true);
@@ -85,8 +89,17 @@ public class PepseGameManager extends GameManager {
 
     }
 
+    @Override
+    public void update(float deltaTime) {
+        super.update(deltaTime);
+        // update camera
+        camera().setCenter(Vector2.of(avatar.getCenter().x(), windowDimensions.y() / 2));
+
+        // infinite gen:
+        handleWorldGeneration();
+    }
+
     private void generateTerrain(int minX, int maxX) {
-        System.out.println("Generating terrain chunk between " + minX + " and " + maxX);
         List<Block> blocks = terrain.createInRange(minX, maxX);
         for (Block block : blocks) {
             gameObjects().addGameObject(block, Constants.BLOCK_LAYER);
@@ -94,25 +107,24 @@ public class PepseGameManager extends GameManager {
     }
 
     private void generateFlora(int minX, int maxX) {
-        System.out.println("Generating flora between " + minX + " and " + maxX);
+        // TODO: problem here :( condition is not good
+        Supplier<AvatarMovement> getMovementMode = avatar::getMovementMode;
+        BooleanSupplier condition = () -> getMovementMode.get() == AvatarMovement.JUMPING;
         List<Tree> trees = flora.createInRange(minX, maxX);
         for (Tree tree : trees) {
-            gameObjects().addGameObject(tree.getTrunk(),Constants.TREE_LAYER);
-            for (GameObject leaf : tree.getLeaves()) {
-                gameObjects().addGameObject(leaf, Constants.TREE_LAYER);
+            gameObjects().addGameObject(tree.getTrunk(), Constants.TRUNK_LAYER);
+            tree.getTrunk().setOperation(gameObjectOperation(tree.getTrunk(), condition));
+            for (Leaf leaf : tree.getLeaves()) {
+                // here we set the tree operation for the leaf
+                leaf.setOperation(gameObjectOperation(leaf, condition));
+                gameObjects().addGameObject(leaf, Constants.LEAF_LAYER);
+            }
+            for (Fruit fruit : tree.getFruits()) {
+                // here we set the tree operation for the fruit
+                fruit.setOperation(gameObjectOperation(fruit, condition));
+                gameObjects().addGameObject(fruit, Constants.LEAF_LAYER);
             }
         }
-    }
-
-    @Override
-    public void update(float deltaTime) {
-        super.update(deltaTime);
-        // update camera
-        camera().setCenter(Vector2.of(avatar.getCenter().x(), windowDimensions.y() / 2));
-
-
-        // infinite gen:
-        handleWorldGeneration();
     }
 
     private void handleWorldGeneration() {
@@ -132,6 +144,55 @@ public class PepseGameManager extends GameManager {
         }
     }
 
+    private Consumer<GameObject> gameObjectOperation(GameObject gameObject, BooleanSupplier condition) {
+        switch(gameObject.getTag()) {
+            case Constants.LEAF_TAG:
+                return (leaf) -> {
+                    if (condition.getAsBoolean()) {
+                        leafOperation().accept(leaf);
+                    }
+                };
+            case Constants.FRUIT_TAG:
+                return (fruit) -> {
+                    if (condition.getAsBoolean()) {
+                        fruitOperation().accept(fruit);
+                    }
+                };
+            case Constants.TRUNK_TAG:
+                return (trunk) -> {
+                    if (condition.getAsBoolean()) {
+                        trunkOperation().accept(trunk);
+                    }
+                };
+            default:
+                return null;
+        }
+    }
+
+    private Consumer<GameObject> leafOperation(){
+        // creating many transitions for each leaf while the avatar is in the air, so it doesn't work properly
+        return (leaf) -> new Transition<>(
+                leaf,
+                leaf.renderer()::setRenderableAngle,
+                leaf.renderer().getRenderableAngle(),
+                leaf.renderer().getRenderableAngle() + 90f,
+                Transition.CUBIC_INTERPOLATOR_FLOAT,
+                1f,
+                Transition.TransitionType.TRANSITION_ONCE,
+                null);
+    }
+
+    private Consumer<GameObject> fruitOperation(){
+        return (fruit) -> {
+            // TODO
+        };
+    }
+
+    private Consumer<GameObject> trunkOperation(){
+        return (trunk) -> {
+            // TODO
+        };
+    }
     public static void main(String[] args) {
         new PepseGameManager().run();
     }
