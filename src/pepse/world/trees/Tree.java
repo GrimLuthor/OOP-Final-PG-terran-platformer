@@ -1,5 +1,6 @@
 package pepse.world.trees;
 
+import danogl.GameObject;
 import danogl.components.GameObjectPhysics;
 import danogl.gui.rendering.OvalRenderable;
 import danogl.gui.rendering.RectangleRenderable;
@@ -12,13 +13,14 @@ import java.util.Set;
 
 import static pepse.util.Constants.*;
 
-public class Tree {
+public class Tree extends GameObject {
     private final Set<Leaf> leaves = new HashSet<>();
     private final Set<Fruit> fruits = new HashSet<>();
     private Vector2 topLeftCorner;
     private Trunk trunk;
 
     public Tree(Vector2 topLeftCorner) {
+        super(topLeftCorner, Vector2.ZERO, null);
         this.topLeftCorner = topLeftCorner;
         createTrunk();
         createLeavesAndFruits();

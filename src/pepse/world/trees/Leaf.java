@@ -55,4 +55,16 @@ public class Leaf extends GameObject {
                 null);
         stretch *= -ONE;
     }
+
+    public void rotate90Degree(){
+        new Transition<>(
+                this,
+                this.renderer()::setRenderableAngle,
+                this.renderer().getRenderableAngle(),
+                this.renderer().getRenderableAngle() + f90,
+                Transition.CUBIC_INTERPOLATOR_FLOAT,
+                ONE,
+                Transition.TransitionType.TRANSITION_ONCE,
+                null);
+    }
 }

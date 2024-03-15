@@ -2,7 +2,6 @@ package pepse;
 
 import danogl.GameManager;
 import danogl.GameObject;
-import danogl.components.Transition;
 import danogl.gui.ImageReader;
 import danogl.gui.SoundReader;
 import danogl.gui.UserInputListener;
@@ -10,7 +9,6 @@ import danogl.gui.WindowController;
 import danogl.gui.rendering.Camera;
 import danogl.util.Vector2;
 import pepse.ui.EnergyCounterUI;
-import pepse.util.AvatarMovement;
 import pepse.world.Avatar;
 import pepse.world.Block;
 import pepse.world.Sky;
@@ -20,8 +18,6 @@ import pepse.world.daynight.Sun;
 import pepse.world.daynight.SunHalo;
 import pepse.world.trees.*;
 
-import java.awt.*;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.Executors;
@@ -33,12 +29,9 @@ import static pepse.util.Constants.*;
 
 public class PepseGameManager extends GameManager {
 
-    private boolean firstJump = true;
-    private Color fruitColor = FRUIT_COLOR_1;
     private Avatar avatar;
     private Terrain terrain;
     private Flora flora;
-    private Set<Tree> trees = new HashSet<>();
 
     private int mostLeftChunk = 0;
     private int mostRightChunk = 0;
@@ -82,7 +75,7 @@ public class PepseGameManager extends GameManager {
         generateTerrain(0, TERRAIN_CHUNK_SIZE);
 
         // create trees:
-        flora = new Flora(terrain);
+        flora = new Flora(terrain::groundHeightAt, avatar::getMovementMode);
         generateFlora(0, TERRAIN_CHUNK_SIZE);
 
         // handle collisions:
@@ -107,17 +100,6 @@ public class PepseGameManager extends GameManager {
         super.update(deltaTime);
         // update camera
         camera().setCenter(Vector2.of(avatar.getCenter().x(), windowDimensions.y() * HALF));
-
-        // jump operation:
-        if (avatar.getMovementMode() == AvatarMovement.JUMPING) {
-            if (firstJump) {
-                jumpOperation();
-                firstJump = false;
-            }
-        }
-        else {
-            firstJump = true;
-        }
 
         // infinite gen:
         handleWorldGeneration();
@@ -149,8 +131,9 @@ public class PepseGameManager extends GameManager {
     }
 
     private void generateFlora(int minX, int maxX) {
-        trees = flora.createInRange(minX, maxX);
+        Set<Tree> trees = flora.createInRange(minX, maxX);
         for (Tree tree : trees) {
+            gameObjects().addGameObject(tree);
             gameObjects().addGameObject(tree.getTrunk(), TRUNK_LAYER);
             for (Leaf leaf : tree.getLeaves()) {
                 gameObjects().addGameObject(leaf, LEAF_LAYER);
@@ -160,32 +143,6 @@ public class PepseGameManager extends GameManager {
                 gameObjects().addGameObject(fruit, FRUIT_LAYER);
             }
         }
-    }
-
-    private void jumpOperation(){
-        fruitColor = fruitColor.equals(FRUIT_COLOR_1) ?
-                FRUIT_COLOR_2 : FRUIT_COLOR_1;
-        for (Tree tree : trees) {
-            for (Leaf leaf : tree.getLeaves()) {
-                leafTransition(leaf);
-            }
-            for (Fruit fruit : tree.getFruits()) {
-                fruit.changeColor(fruitColor);
-            }
-            tree.getTrunk().changeColor(TRUNK_COLOR);
-        }
-    }
-
-    private void leafTransition(Leaf leaf){
-        new Transition<>(
-                leaf,
-                leaf.renderer()::setRenderableAngle,
-                leaf.renderer().getRenderableAngle(),
-                leaf.renderer().getRenderableAngle() + f90,
-                Transition.CUBIC_INTERPOLATOR_FLOAT,
-                ONE,
-                Transition.TransitionType.TRANSITION_ONCE,
-                null);
     }
 
     private Consumer<GameObject> eatFruit(){
