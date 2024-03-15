@@ -87,6 +87,7 @@ public class PepseGameManager extends GameManager {
 
         // handle collisions:
         gameObjects().layers().shouldLayersCollide(BLOCK_LAYER, AVATAR_LAYER, true);
+        gameObjects().layers().shouldLayersCollide(TRUNK_LAYER, AVATAR_LAYER, true);
         gameObjects().layers().shouldLayersCollide(AVATAR_LAYER, FRUIT_LAYER, true);
 
     }

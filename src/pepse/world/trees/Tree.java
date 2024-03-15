@@ -1,5 +1,6 @@
 package pepse.world.trees;
 
+import danogl.components.GameObjectPhysics;
 import danogl.gui.rendering.OvalRenderable;
 import danogl.gui.rendering.RectangleRenderable;
 import danogl.gui.rendering.Renderable;
@@ -30,17 +31,12 @@ public class Tree {
         topLeftCorner = topLeftCorner.add(Vector2.of(0, -trunkHeight));
         trunk = new Trunk(topLeftCorner, Vector2.of(BLOCK_SIZE,
                 trunkHeight + BLOCK_SIZE * HALF), trunkRender);
-        // TODO: make trunk like the block
-//        trunk.physics().preventIntersectionsFromDirection(Vector2.ZERO);
-//        trunk.physics().preventIntersectionsFromDirection(Vector2.RIGHT);
-//        trunk.physics().preventIntersectionsFromDirection(Vector2.LEFT);
-//        trunk.physics().preventIntersectionsFromDirection(Vector2.UP);
-//        trunk.physics().preventIntersectionsFromDirection(Vector2.DOWN);
-//        trunk.physics().setMass(GameObjectPhysics.IMMOVABLE_MASS);
+        trunk.physics().preventIntersectionsFromDirection(Vector2.ZERO);
+        trunk.physics().setMass(GameObjectPhysics.IMMOVABLE_MASS);
     }
 
     private void createLeavesAndFruits() {
-        float half = LEAVES_CROWN_SIZE / 2f;
+        float half = LEAVES_CROWN_SIZE * HALF;
         Vector2 leavesTopLeftCorner =
                 Vector2.of(topLeftCorner.x() - (half - HALF) * BLOCK_SIZE,
                 topLeftCorner.y() - half * BLOCK_SIZE);
