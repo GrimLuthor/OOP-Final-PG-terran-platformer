@@ -139,13 +139,13 @@ public class PepseGameManager extends GameManager {
                 gameObjects().addGameObject(leaf, LEAF_LAYER);
             }
             for (Fruit fruit : tree.getFruits()) {
-                fruit.setEatFruitOperation(eatFruit());
+                fruit.setEatFruitOperation(getEatFruitStrategy());
                 gameObjects().addGameObject(fruit, FRUIT_LAYER);
             }
         }
     }
 
-    private Consumer<GameObject> eatFruit(){
+    private Consumer<GameObject> getEatFruitStrategy(){
         return (item) -> {
             gameObjects().removeGameObject(item, FRUIT_LAYER);
             executor.schedule(() -> gameObjects().addGameObject(item, FRUIT_LAYER),
