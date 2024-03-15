@@ -7,15 +7,16 @@ import danogl.gui.rendering.AnimationRenderable;
 import danogl.gui.rendering.Renderable;
 import danogl.util.Vector2;
 import pepse.util.AvatarMovement;
-import pepse.util.Constants;
 
 import java.awt.event.KeyEvent;
+
+import static pepse.util.Constants.*;
 
 public class Avatar extends GameObject {
     private final UserInputListener inputListener;
     private final ImageReader imageReader;
 
-    private float energy = Constants.ENERGY_POINTS_MAX;
+    private float energy = ENERGY_POINTS_MAX;
 
     private AvatarMovement movementMode = AvatarMovement.IDLE;
 
@@ -24,11 +25,13 @@ public class Avatar extends GameObject {
     private AnimationRenderable runAnimation;
 
     public Avatar(Vector2 pos, UserInputListener inputListener, ImageReader imageReader) {
-        super(pos, new Vector2(50, 78), imageReader.readImage("assets/idle_0.png", true));
+        super(pos, AVATAR_DIMENSIONS_IDLE,
+                imageReader.readImage("assets/idle_0.png", true));
         physics().preventIntersectionsFromDirection(Vector2.ZERO);
-        transform().setAccelerationY(Constants.GRAVITY);
+        transform().setAccelerationY(GRAVITY);
         this.inputListener = inputListener;
         this.imageReader = imageReader;
+        this.setTag(AVATAR_TAG);
     }
 
     @Override
@@ -42,17 +45,18 @@ public class Avatar extends GameObject {
     private void processWalking() {
         float xVel = 0;
 
-        if (energy >= 0.5f && (inputListener.isKeyPressed(KeyEvent.VK_RIGHT) ^ inputListener.isKeyPressed(KeyEvent.VK_LEFT))) {
+        if (energy >= HALF && (inputListener.isKeyPressed(KeyEvent.VK_RIGHT) ^
+                inputListener.isKeyPressed(KeyEvent.VK_LEFT))) {
             xVel = processMovementInDirection();
         }
 
         transform().setVelocityX(xVel);
 
         if (getVelocity().x() != 0) {
-//            energy -= 0.5f;
+            energy -= HALF;
         } else if (isOnGround() && inputListener.isKeyPressed(KeyEvent.VK_LEFT)
                 == inputListener.isKeyPressed(KeyEvent.VK_RIGHT)) {
-            energy = Math.min(energy + 1, 100);
+            energy = Math.min(energy + ONE, ENERGY_POINTS_MAX);
             movementMode = AvatarMovement.IDLE;
             setAnimationIdle();
         }
@@ -71,11 +75,11 @@ public class Avatar extends GameObject {
 
         float xVel = 0;
         if (inputListener.isKeyPressed(KeyEvent.VK_LEFT)) {
-            xVel -= Constants.VELOCITY_X;
+            xVel -= VELOCITY_X;
             renderer().setIsFlippedHorizontally(true);
         }
         if (inputListener.isKeyPressed(KeyEvent.VK_RIGHT)) {
-            xVel += Constants.VELOCITY_X;
+            xVel += VELOCITY_X;
             renderer().setIsFlippedHorizontally(false);
         }
 
@@ -83,9 +87,9 @@ public class Avatar extends GameObject {
     }
 
     private void processJumping() {
-        if (energy >= 10 && inputListener.isKeyPressed(KeyEvent.VK_SPACE) && isOnGround()) {
-            transform().setVelocityY(Constants.VELOCITY_Y);
-//            energy -= 10;
+        if (energy >= ENERGY_POINTS_MIN && inputListener.isKeyPressed(KeyEvent.VK_SPACE) && isOnGround()) {
+            transform().setVelocityY(VELOCITY_Y);
+            energy -= ENERGY_POINTS_MIN;
             movementMode = AvatarMovement.JUMPING;
             setAnimationJump();
         }
@@ -100,33 +104,33 @@ public class Avatar extends GameObject {
                             imageReader.readImage("assets/idle_2.png", true),
                             imageReader.readImage("assets/idle_3.png", true)
                     },
-                    Constants.TIME_BETWEEN_CLIPS
+                    TIME_BETWEEN_CLIPS
             );
         }
         renderer().setRenderable(idleAnimation);
-        setDimensions(Vector2.of(50,78));
+        setDimensions(AVATAR_DIMENSIONS_IDLE);
     }
 
     private void setAnimationJump() {
         if (jumpAnimation == null) {
             jumpAnimation = new AnimationRenderable(
-                    new Renderable[] {
+                    new Renderable[]{
                             imageReader.readImage("assets/jump_0.png", true),
                             imageReader.readImage("assets/jump_1.png", true),
                             imageReader.readImage("assets/jump_2.png", true),
                             imageReader.readImage("assets/jump_3.png", true)
                     },
-                    Constants.TIME_BETWEEN_CLIPS
+                    TIME_BETWEEN_CLIPS
             );
         }
         renderer().setRenderable(jumpAnimation);
-        setDimensions(Vector2.of(69,73));
+        setDimensions(AVATAR_DIMENSIONS_JUMP);
     }
 
-    private void setAnimationRun () {
+    private void setAnimationRun() {
         if (runAnimation == null) {
             runAnimation = new AnimationRenderable(
-                    new Renderable[] {
+                    new Renderable[]{
                             imageReader.readImage("assets/run_0.png", true),
                             imageReader.readImage("assets/run_1.png", true),
                             imageReader.readImage("assets/run_2.png", true),
@@ -134,11 +138,11 @@ public class Avatar extends GameObject {
                             imageReader.readImage("assets/run_4.png", true),
                             imageReader.readImage("assets/run_5.png", true)
                     },
-                    Constants.TIME_BETWEEN_CLIPS
+                    TIME_BETWEEN_CLIPS
             );
         }
         renderer().setRenderable(runAnimation);
-        setDimensions(Vector2.of(58,73));
+        setDimensions(AVATAR_DIMENSIONS_RUN);
     }
 
     private boolean isOnGround() {
@@ -147,6 +151,10 @@ public class Avatar extends GameObject {
 
     public float getEnergyCount() {
         return energy;
+    }
+
+    public void setEnergyCount(float energy) {
+        this.energy = energy > ENERGY_POINTS_MAX ? ENERGY_POINTS_MAX : energy;
     }
 
     public AvatarMovement getMovementMode() {

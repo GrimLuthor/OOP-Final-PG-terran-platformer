@@ -19,7 +19,8 @@ public class Constants {
     public static final int BLOCK_LAYER = 1;
     public static final int TRUNK_LAYER = 2;
     public static final int LEAF_LAYER = 3;
-    public static final int AVATAR_LAYER = 4;
+    public static final int FRUIT_LAYER = 4;
+    public static final int AVATAR_LAYER = 5;
     public static final int NIGHT_SHADOW_LAYER = 100;
     public static final int ENERGY_COUNTER_LAYER = Layer.UI;
 
@@ -36,6 +37,7 @@ public class Constants {
 
     // tags:
     public static final String GROUND_TAG = "ground";
+    public static final String AVATAR_TAG = "avatar";
     public static final String NIGHT_TAG = "night";
     public static final String SKY_TAG = "sky";
     public static final String SUN_TAG = "sun";
@@ -63,8 +65,13 @@ public class Constants {
 
     // energy variables:
     public static final int ENERGY_POINTS_MAX = 100;
+    public static final int ENERGY_POINTS_MIN = 10;
+    public static final int ENERGY_FROM_FRUIT = 10;
 
     // avatar variables:
+    public static final Vector2 AVATAR_DIMENSIONS_IDLE = Vector2.of(50, 78);
+    public static final Vector2 AVATAR_DIMENSIONS_JUMP = Vector2.of(69, 73);
+    public static final Vector2 AVATAR_DIMENSIONS_RUN = Vector2.of(58, 73);
     public static final float VELOCITY_X = 400;
     public static final float VELOCITY_Y = -800;
     public static final float GRAVITY = 1000;
@@ -72,7 +79,10 @@ public class Constants {
     // tree variables:
     public static final int AVG_TREE_HEIGHT = 200;
     public static final int LEAVES_CROWN_SIZE = 6;
-    public static final Color FRUIT_COLOR = Color.RED;
+    public static final float FRUIT_SIZE = BLOCK_SIZE * 0.7f;
+    public static final int FRUIT_RESPAWN = 30;
+    public static final Color FRUIT_COLOR_1 = Color.RED;
+    public static final Color FRUIT_COLOR_2 = Color.YELLOW;
 
     // spawn probabilities:
     public static final double TREE_PROBABILITY = 0.069;
@@ -81,4 +91,16 @@ public class Constants {
 
     // animation:
     public static final double TIME_BETWEEN_CLIPS = 0.2;
+
+    // IDK
+    public static final int ONE = 1;
+    public static final float f0_2 = 0.2f;
+    public static final float HALF = 0.5f;
+    public static final float TWO_THIRDS = 2f/3f;
+    public static final float f0_8 = 0.8f;
+    public static final float f1_2 = 1.2f;
+    public static final float f3 = 3f;
+    public static final float f7 = 7f;
+    public static final float f90 = 90f;
+    public static final float CIRCLE = 360f;
 }

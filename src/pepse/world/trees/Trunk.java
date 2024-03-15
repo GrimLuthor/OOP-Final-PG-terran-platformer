@@ -1,25 +1,21 @@
 package pepse.world.trees;
 
 import danogl.GameObject;
+import danogl.gui.rendering.RectangleRenderable;
 import danogl.gui.rendering.Renderable;
 import danogl.util.Vector2;
-import pepse.util.Constants;
+import pepse.util.ColorSupplier;
 
-import java.util.function.Consumer;
+import java.awt.*;
+import static pepse.util.Constants.*;
 
 public class Trunk extends GameObject {
-    private Consumer<GameObject> operation;
     public Trunk(Vector2 topLeftCorner, Vector2 size, Renderable renderable) {
         super(topLeftCorner, size, renderable);
-        this.setTag(Constants.TRUNK_TAG);
+        this.setTag(TRUNK_TAG);
     }
 
-    public void update(float deltaTime) {
-        super.update(deltaTime);
-        operation.accept(this);
-    }
-
-    public void setOperation(Consumer<GameObject> operation) {
-        this.operation = operation;
+    public void changeColor(Color color) {
+        this.renderer().setRenderable(new RectangleRenderable(ColorSupplier.approximateColor(color)));
     }
 }

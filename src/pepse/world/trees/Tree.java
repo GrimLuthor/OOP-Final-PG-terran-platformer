@@ -5,16 +5,17 @@ import danogl.gui.rendering.RectangleRenderable;
 import danogl.gui.rendering.Renderable;
 import danogl.util.Vector2;
 import pepse.util.ColorSupplier;
-import pepse.util.Constants;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
+
+import static pepse.util.Constants.*;
 
 public class Tree {
-    private final List<Leaf> leaves = new ArrayList<>();
-    private final List<Fruit> fruits = new ArrayList<>();
-    private Trunk trunk;
+    private final Set<Leaf> leaves = new HashSet<>();
+    private final Set<Fruit> fruits = new HashSet<>();
     private Vector2 topLeftCorner;
+    private Trunk trunk;
 
     public Tree(Vector2 topLeftCorner) {
         this.topLeftCorner = topLeftCorner;
@@ -23,12 +24,12 @@ public class Tree {
     }
 
     private void createTrunk() {
-        Renderable trunkRender = new RectangleRenderable(Constants.TRUNK_COLOR);
-        int h = Constants.AVG_TREE_HEIGHT;
-        int trunkHeight = (int) (Constants.rand.nextFloat(h * 1.2f - h * 0.8f) + h * 0.8f);
+        Renderable trunkRender = new RectangleRenderable(TRUNK_COLOR);
+        int h = AVG_TREE_HEIGHT;
+        int trunkHeight = (int) (rand.nextFloat(h * f1_2 - h * f0_8) + h * f0_8);
         topLeftCorner = topLeftCorner.add(Vector2.of(0, -trunkHeight));
-        trunk = new Trunk(topLeftCorner, Vector2.of(Constants.BLOCK_SIZE,
-                trunkHeight + Constants.BLOCK_SIZE / 2f), trunkRender);
+        trunk = new Trunk(topLeftCorner, Vector2.of(BLOCK_SIZE,
+                trunkHeight + BLOCK_SIZE * HALF), trunkRender);
         // TODO: make trunk like the block
 //        trunk.physics().preventIntersectionsFromDirection(Vector2.ZERO);
 //        trunk.physics().preventIntersectionsFromDirection(Vector2.RIGHT);
@@ -39,25 +40,26 @@ public class Tree {
     }
 
     private void createLeavesAndFruits() {
-        float half = Constants.LEAVES_CROWN_SIZE / 2f;
-        Vector2 leavesTopLeftCorner = Vector2.of(topLeftCorner.x() - (half - 0.5f) * Constants.BLOCK_SIZE,
-                topLeftCorner.y() - half * Constants.BLOCK_SIZE);
+        float half = LEAVES_CROWN_SIZE / 2f;
+        Vector2 leavesTopLeftCorner =
+                Vector2.of(topLeftCorner.x() - (half - HALF) * BLOCK_SIZE,
+                topLeftCorner.y() - half * BLOCK_SIZE);
 
         float y = leavesTopLeftCorner.y();
         float x = leavesTopLeftCorner.x();
 
-        for (int row = 0; row < Constants.LEAVES_CROWN_SIZE; row++) {
-            for (int col = 0; col < Constants.LEAVES_CROWN_SIZE; col++) {
-                float random = Constants.rand.nextFloat();
-                if (random < Constants.LEAF_PROBABILITY) {
+        for (int row = 0; row < LEAVES_CROWN_SIZE; row++) {
+            for (int col = 0; col < LEAVES_CROWN_SIZE; col++) {
+                float random = rand.nextFloat();
+                if (random < LEAF_PROBABILITY) {
                     createLeaf(Vector2.of(x, y));
                 }
-                else if (random < Constants.FRUIT_PROBABILITY) {
+                else if (random < FRUIT_PROBABILITY) {
                     createFruit(Vector2.of(x, y));
                 }
-                x += Constants.BLOCK_SIZE;
+                x += BLOCK_SIZE;
             }
-            y += Constants.BLOCK_SIZE;
+            y += BLOCK_SIZE;
             x = leavesTopLeftCorner.x();
         }
 
@@ -65,24 +67,24 @@ public class Tree {
 
     private void createLeaf(Vector2 position) {
         Renderable leafRender =
-                new RectangleRenderable(ColorSupplier.approximateColor(Constants.LEAF_COLOR));
+                new RectangleRenderable(ColorSupplier.approximateColor(LEAF_COLOR));
         Leaf leaf = new Leaf(position,
-                Vector2.ONES.mult(Constants.BLOCK_SIZE), leafRender);
+                Vector2.ONES.mult(BLOCK_SIZE), leafRender);
         leaves.add(leaf);
     }
 
     private void createFruit(Vector2 position) {
         Renderable fruitRender =
-                new OvalRenderable(ColorSupplier.approximateColor(Constants.FRUIT_COLOR));
-        Vector2 size = Vector2.ONES.mult(Constants.BLOCK_SIZE).mult(0.7f);
-        Fruit fruit = new Fruit(position.add(size.mult(0.2f)), size, fruitRender);
+                new OvalRenderable(ColorSupplier.approximateColor(FRUIT_COLOR_1));
+        Vector2 size = Vector2.ONES.mult(FRUIT_SIZE);
+        Fruit fruit = new Fruit(position.add(size.mult(f0_2)), size, fruitRender);
         fruits.add(fruit);
     }
 
-    public List<Fruit> getFruits() {
+    public Set<Fruit> getFruits() {
         return fruits;
     }
-    public List<Leaf> getLeaves() {
+    public Set<Leaf> getLeaves() {
         return leaves;
     }
 
