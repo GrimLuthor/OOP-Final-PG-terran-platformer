@@ -11,7 +11,10 @@ import pepse.util.AvatarMovement;
 import java.awt.event.KeyEvent;
 
 import static pepse.util.Constants.*;
-
+/**
+ * Avatar class represents the player's character in the game.
+ * It extends GameObject and handles avatar movement, animations, and energy management.
+ */
 public class Avatar extends GameObject {
     private final UserInputListener inputListener;
     private final ImageReader imageReader;
@@ -24,6 +27,12 @@ public class Avatar extends GameObject {
     private AnimationRenderable jumpAnimation;
     private AnimationRenderable runAnimation;
 
+    /**
+     * Constructs an Avatar object with the specified position, input listener, and image reader.
+     * @param pos The initial position of the avatar
+     * @param inputListener The user input listener for controlling the avatar
+     * @param imageReader The image reader for loading avatar resources
+     */
     public Avatar(Vector2 pos, UserInputListener inputListener, ImageReader imageReader) {
         super(pos, AVATAR_DIMENSIONS_IDLE,
                 imageReader.readImage("assets/idle_0.png", true));
@@ -34,6 +43,10 @@ public class Avatar extends GameObject {
         this.setTag(AVATAR_TAG);
     }
 
+    /**
+     * Updates the avatar's state based on user input and energy level.
+     * @param deltaTime The time elapsed since the last update
+     */
     @Override
     public void update(float deltaTime) {
         super.update(deltaTime);
@@ -42,6 +55,9 @@ public class Avatar extends GameObject {
         processWalking();
     }
 
+    /**
+     * Processes avatar movement based on user input.
+     */
     private void processWalking() {
         float xVel = 0;
 
@@ -67,6 +83,9 @@ public class Avatar extends GameObject {
         }
     }
 
+    /**
+     * Processes avatar movement left or right based on user input.
+     */
     private float processMovementInDirection() {
         if (movementMode == AvatarMovement.IDLE) {
             movementMode = AvatarMovement.RUNNING;
@@ -86,6 +105,9 @@ public class Avatar extends GameObject {
         return xVel;
     }
 
+    /**
+     * Processes avatar jumping based on user input and energy level.
+     */
     private void processJumping() {
         if (energy >= ENERGY_POINTS_MIN && inputListener.isKeyPressed(KeyEvent.VK_SPACE) && isOnGround()) {
             transform().setVelocityY(VELOCITY_Y);
@@ -95,6 +117,9 @@ public class Avatar extends GameObject {
         }
     }
 
+    /**
+     * Sets the avatar animation to idle state.
+     */
     private void setAnimationIdle() {
         if (idleAnimation == null) {
             idleAnimation = new AnimationRenderable(
@@ -111,6 +136,9 @@ public class Avatar extends GameObject {
         setDimensions(AVATAR_DIMENSIONS_IDLE);
     }
 
+    /**
+     * Sets the avatar animation to jump state.
+     */
     private void setAnimationJump() {
         if (jumpAnimation == null) {
             jumpAnimation = new AnimationRenderable(
@@ -127,6 +155,9 @@ public class Avatar extends GameObject {
         setDimensions(AVATAR_DIMENSIONS_JUMP);
     }
 
+    /**
+     * Sets the avatar animation to run state.
+     */
     private void setAnimationRun() {
         if (runAnimation == null) {
             runAnimation = new AnimationRenderable(
@@ -145,18 +176,34 @@ public class Avatar extends GameObject {
         setDimensions(AVATAR_DIMENSIONS_RUN);
     }
 
+    /**
+     * Checks if the avatar is on the ground.
+     * @return True if the avatar is on the ground, false otherwise
+     */
     private boolean isOnGround() {
         return getVelocity().y() == 0;
     }
 
+    /**
+     * Gets the current energy count of the avatar.
+     * @return The current energy count
+     */
     public float getEnergyCount() {
         return energy;
     }
 
+    /**
+     * Sets the energy count of the avatar.
+     * @param energy The energy count to set
+     */
     public void setEnergyCount(float energy) {
         this.energy = energy > ENERGY_POINTS_MAX ? ENERGY_POINTS_MAX : energy;
     }
 
+    /**
+     * Gets the current movement mode of the avatar.
+     * @return The current movement mode
+     */
     public AvatarMovement getMovementMode() {
         return movementMode;
     }

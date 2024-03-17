@@ -13,12 +13,20 @@ import java.util.Set;
 
 import static pepse.util.Constants.*;
 
+/**
+ * Tree class represents a tree object in the game world.
+ * It extends GameObject and contains leaves and fruits.
+ */
 public class Tree extends GameObject {
     private final Set<Leaf> leaves = new HashSet<>();
     private final Set<Fruit> fruits = new HashSet<>();
     private Vector2 topLeftCorner;
     private Trunk trunk;
 
+    /**
+     * Constructs a Tree object with the specified top-left corner position.
+     * @param topLeftCorner The top-left corner position of the tree
+     */
     public Tree(Vector2 topLeftCorner) {
         super(topLeftCorner, Vector2.ZERO, null);
         this.topLeftCorner = topLeftCorner;
@@ -26,6 +34,9 @@ public class Tree extends GameObject {
         createLeavesAndFruits();
     }
 
+    /**
+     * Creates the trunk of the tree.
+     */
     private void createTrunk() {
         Renderable trunkRender = new RectangleRenderable(TRUNK_COLOR);
         int h = AVG_TREE_HEIGHT;
@@ -37,6 +48,9 @@ public class Tree extends GameObject {
         trunk.physics().setMass(GameObjectPhysics.IMMOVABLE_MASS);
     }
 
+    /**
+     * Creates leaves and fruits of the tree.
+     */
     private void createLeavesAndFruits() {
         float half = LEAVES_CROWN_SIZE * HALF;
         Vector2 leavesTopLeftCorner =
@@ -63,6 +77,10 @@ public class Tree extends GameObject {
 
     }
 
+    /**
+     * Creates a leaf at the specified position.
+     * @param position The position of the leaf
+     */
     private void createLeaf(Vector2 position) {
         Renderable leafRender =
                 new RectangleRenderable(ColorSupplier.approximateColor(LEAF_COLOR));
@@ -71,6 +89,10 @@ public class Tree extends GameObject {
         leaves.add(leaf);
     }
 
+    /**
+     * Creates a fruit at the specified position.
+     * @param position The position of the fruit
+     */
     private void createFruit(Vector2 position) {
         Renderable fruitRender =
                 new OvalRenderable(ColorSupplier.approximateColor(FRUIT_COLOR_1));
@@ -79,13 +101,26 @@ public class Tree extends GameObject {
         fruits.add(fruit);
     }
 
+    /**
+     * Retrieves the set of fruits of the tree.
+     * @return The set of fruits of the tree
+     */
     public Set<Fruit> getFruits() {
         return fruits;
     }
+
+    /**
+     * Retrieves the set of leaves of the tree.
+     * @return The set of leaves of the tree
+     */
     public Set<Leaf> getLeaves() {
         return leaves;
     }
 
+    /**
+     * Retrieves the trunk of the tree.
+     * @return The trunk of the tree
+     */
     public Trunk getTrunk() {
         return trunk;
     }

@@ -9,7 +9,17 @@ import danogl.util.Vector2;
 import java.awt.*;
 import static pepse.util.Constants.*;
 
+/**
+ * Sun class represents the sun object in the game world.
+ * It provides a static method to create a sun GameObject with specified properties.
+ */
 public class Sun {
+    /**
+     * Creates a sun GameObject with the specified window dimensions and cycle length.
+     * @param windowDimensions The dimensions of the game window
+     * @param cycleLength The length of the day-night cycle
+     * @return The created sun GameObject
+     */
     public static GameObject create(Vector2 windowDimensions, float cycleLength) {
 
         Vector2 sunDimensions = Vector2.ONES.mult(SUN_SIZE);

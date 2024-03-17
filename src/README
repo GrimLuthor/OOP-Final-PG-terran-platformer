@@ -1,0 +1,21 @@
+grim_daniel,noam_navon
+332559202,214668048
+
+The Tree class serves as a facade to manage the different components of a tree,
+ including the trunk, leaves, and fruits,
+all of which are GameObjects. Why did we structure it this way?
+We made this decision to encapsulate the complex
+behaviors of each part within the Tree class itself.
+Each component of the tree: trunk, leaves, and fruits,
+is rendered and possesses its own dimensions, colors,
+and other properties. While the Tree itself is also rendered,
+it doesn't have a physical body.
+Instead, we add it to the list of GameObjects, allowing it to
+update all its "physical" parts.
+When creating a tree instance in the Flora class, we attach a
+component responsible for updating the animations of
+leaves and fruits. This component detects jumps by utilizing a
+supplier provided to it, rather than having
+direct access to the entire Avatar instance. This design choice
+enhances modularity and encapsulation within our
+codebase.

@@ -10,8 +10,18 @@ import java.awt.*;
 
 import static pepse.util.Constants.*;
 
+/**
+ * Night class represents the night environment in the game world.
+ * It provides a static method to create a night GameObject with specified properties.
+ */
 public class Night {
 
+    /**
+     * Creates a night GameObject with the specified window dimensions and cycle length.
+     * @param windowDimensions The dimensions of the game window
+     * @param cycleLength The length of the day-night cycle
+     * @return The created night GameObject
+     */
     public static GameObject create(Vector2 windowDimensions, float cycleLength) {
         GameObject night  = new GameObject(Vector2.ZERO,windowDimensions,
                 new RectangleRenderable(Color.BLACK));

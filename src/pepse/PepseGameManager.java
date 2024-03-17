@@ -26,20 +26,31 @@ import java.util.function.*;
 
 import static pepse.util.Constants.*;
 
-
+/**
+ * PepseGameManager class extends GameManager and manages the game logic for the Pepse game.
+ * It handles the initialization of game elements, updates, and world generation.
+ */
 public class PepseGameManager extends GameManager {
+    // Private member variables:
+    private Avatar avatar; // The player's avatar
+    private Terrain terrain; // Terrain object for the game world
+    private Flora flora; // Flora object for generating trees and plants
 
-    private Avatar avatar;
-    private Terrain terrain;
-    private Flora flora;
+    private int mostLeftChunk = 0; // Index of the leftmost terrain chunk
+    private int mostRightChunk = 0; // Index of the rightmost terrain chunk
 
-    private int mostLeftChunk = 0;
-    private int mostRightChunk = 0;
+    private Vector2 windowDimensions; // Dimensions of the game window
 
-    private Vector2 windowDimensions;
-
+    // Executor service for scheduling tasks:
     private final ScheduledExecutorService executor = Executors.newScheduledThreadPool(ONE);
 
+    /**
+     * Initializes the game by creating game objects, setting up the environment, and handling collisions.
+     * @param imageReader The image reader for loading game resources
+     * @param soundReader The sound reader for loading game sounds
+     * @param inputListener The user input listener for handling player input
+     * @param windowController The window controller for managing the game window
+     */
     @Override
     public void initializeGame(ImageReader imageReader, SoundReader soundReader,
                                UserInputListener inputListener, WindowController windowController) {
@@ -85,6 +96,12 @@ public class PepseGameManager extends GameManager {
 
     }
 
+    /**
+     * Creates the player's avatar and adds it to the game.
+     * @param imageReader The image reader for loading avatar resources
+     * @param inputListener The user input listener for handling avatar controls
+     * @param windowController The window controller for positioning the avatar
+     */
     private void createAvatar(ImageReader imageReader, UserInputListener inputListener,
                               WindowController windowController) {
         avatar = new Avatar(Vector2.of(0,
@@ -95,6 +112,10 @@ public class PepseGameManager extends GameManager {
         gameObjects().addGameObject(avatar, AVATAR_LAYER);
     }
 
+    /**
+     * Updates the game state.
+     * @param deltaTime The time elapsed since the last update
+     */
     @Override
     public void update(float deltaTime) {
         super.update(deltaTime);
@@ -105,6 +126,9 @@ public class PepseGameManager extends GameManager {
         handleWorldGeneration();
     }
 
+    /**
+     * Handles the generation of new terrain and flora based on the player's position.
+     */
     private void handleWorldGeneration() {
         if (avatar.getCenter().x() - ((mostLeftChunk) * TERRAIN_CHUNK_SIZE) < windowDimensions.x() * HALF) {
             int minX = (mostLeftChunk - ONE) * TERRAIN_CHUNK_SIZE;
@@ -123,6 +147,11 @@ public class PepseGameManager extends GameManager {
         }
     }
 
+    /**
+     * Generates terrain blocks within a specified range.
+     * @param minX The minimum x-coordinate for terrain generation
+     * @param maxX The maximum x-coordinate for terrain generation
+     */
     private void generateTerrain(int minX, int maxX) {
         List<Block> blocks = terrain.createInRange(minX, maxX);
         for (Block block : blocks) {
@@ -130,6 +159,11 @@ public class PepseGameManager extends GameManager {
         }
     }
 
+    /**
+     * Generates trees and associated game objects within a specified range.
+     * @param minX The minimum x-coordinate for tree generation
+     * @param maxX The maximum x-coordinate for tree generation
+     */
     private void generateFlora(int minX, int maxX) {
         Set<Tree> trees = flora.createInRange(minX, maxX);
         for (Tree tree : trees) {
@@ -145,6 +179,10 @@ public class PepseGameManager extends GameManager {
         }
     }
 
+    /**
+     * Defines the strategy for eating fruits and replenishing energy.
+     * @return A consumer function to handle fruit consumption
+     */
     private Consumer<GameObject> getEatFruitStrategy(){
         return (item) -> {
             gameObjects().removeGameObject(item, FRUIT_LAYER);
@@ -153,6 +191,11 @@ public class PepseGameManager extends GameManager {
             avatar.setEnergyCount(avatar.getEnergyCount() + ENERGY_FROM_FRUIT);
         };
     }
+
+    /**
+     * Entry point for running the Pepse game.
+     * @param args Command-line arguments (not used)
+     */
     public static void main(String[] args) {
         new PepseGameManager().run();
     }
